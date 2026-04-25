@@ -5,38 +5,65 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Oracle Enterprise — AI Team with Persistent Memory, On-Premise</title>
   <meta name="description" content="Oracle Enterprise: AI agent system สำหรับองค์กร — persistent memory, multi-agent federation, guided autonomy, 100% on-premise knowledge">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..800;1,6..72,200..800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0a0a0f;
-      --surface: #12121a;
-      --surface2: #1a1a28;
-      --border: #2a2a3a;
-      --text: #e4e4f0;
-      --text-dim: #8888a0;
-      --accent: #7c6ef0;
-      --accent2: #a78bfa;
-      --accent-glow: rgba(124, 110, 240, 0.15);
-      --green: #34d399;
-      --blue: #60a5fa;
-      --amber: #fbbf24;
-      --rose: #fb7185;
-      --radius: 12px;
+      --primary: #F47C59;
+      --secondary: #241208;
+      --tertiary: #92CFF2;
+      --neutral: #FCF9F6;
+      --bg: #FCF9F6;
+      --surface: #FCF9F6;
+      --text: #241208;
+      --text-dim: #6b5a4e;
+      --border: #241208;
+      --accent: #F47C59;
+      --radius: 0px;
+      --shadow-sm: 0 1px 1px rgba(25,28,33,0.08), 0 0 0 1px rgba(25,28,33,0.08);
+      --shadow-md: 0 3px 3px rgba(0,0,0,0.06), 0 6px 6px rgba(0,0,0,0.06), 0 12px 12px rgba(0,0,0,0.06);
+      --shadow-lg: 0 2.8px 2.2px rgba(0,0,0,0.035), 0 6.7px 5.3px rgba(0,0,0,0.047), 0 12.5px 10px rgba(0,0,0,0.06), 0 22.3px 17.9px rgba(0,0,0,0.07), 0 41.8px 33.4px rgba(0,0,0,0.086), 0 100px 80px rgba(0,0,0,0.12);
     }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
+
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+      font-family: 'SFMono-Regular', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 19.5px;
+      letter-spacing: -0.025em;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
-      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
+
+    .headline {
+      font-family: 'Newsreader', Georgia, serif;
+      font-weight: 200;
+      line-height: 1.25;
+      letter-spacing: -0.025em;
+    }
+
+    .label {
+      font-family: 'SFMono-Regular', 'SF Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    a { color: var(--primary); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* Nav */
     .nav {
       position: sticky;
       top: 0;
-      background: rgba(10,10,15,0.85);
-      backdrop-filter: blur(12px);
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
-      padding: 12px 24px;
+      padding: 16px 24px;
       z-index: 100;
       display: flex;
       justify-content: space-between;
@@ -45,63 +72,68 @@
     .nav a {
       color: var(--text-dim);
       text-decoration: none;
-      font-size: 0.9rem;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.2s;
+      font-size: 12px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      transition: color 0.3s ease;
     }
-    .nav a:hover { color: var(--text); background: var(--surface2); }
-    .nav a.active { color: var(--accent2); }
+    .nav a:hover { color: var(--text); text-decoration: none; }
+    .nav a.active { color: var(--primary); }
+
+    /* Hero */
     .hero {
       position: relative;
-      padding: 120px 24px 80px;
+      padding: 120px 24px 100px;
       text-align: center;
       overflow: hidden;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
-    .hero::before {
-      content: '';
+    #hero-canvas {
       position: absolute;
-      top: -50%;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 800px;
-      height: 800px;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 720px;
     }
     .hero-badge {
       display: inline-block;
-      padding: 6px 16px;
-      background: var(--surface2);
+      padding: 8px 16px;
       border: 1px solid var(--border);
-      border-radius: 999px;
-      font-size: 0.8rem;
-      color: var(--amber);
-      margin-bottom: 24px;
-      letter-spacing: 0.5px;
+      font-size: 12px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--tertiary);
+      margin-bottom: 32px;
+      background: var(--bg);
     }
     .hero h1 {
-      font-size: clamp(2.5rem, 6vw, 4.5rem);
-      font-weight: 800;
-      line-height: 1.1;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, #fff 0%, var(--amber) 50%, var(--green) 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
+      font-size: clamp(32px, 6vw, 60px);
+      margin-bottom: 24px;
+      color: var(--neutral);
     }
     .hero p {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      color: var(--text-dim);
-      max-width: 650px;
-      margin: 0 auto 32px;
+      font-size: 14px;
+      color: var(--neutral);
+      opacity: 0.85;
+      max-width: 580px;
+      margin: 0 auto 24px;
+      line-height: 1.8;
     }
     .hero-motto {
-      font-size: 1.1rem;
+      font-family: 'Newsreader', serif;
+      font-size: 16px;
       font-style: italic;
-      color: var(--accent2);
+      color: var(--primary);
       opacity: 0.8;
-      margin-bottom: 32px;
+      margin-bottom: 40px;
     }
     .hero-actions {
       display: flex;
@@ -114,48 +146,45 @@
       align-items: center;
       gap: 8px;
       padding: 12px 24px;
-      border-radius: var(--radius);
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-family: 'SFMono-Regular', 'SF Mono', monospace;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
       border: none;
       cursor: pointer;
     }
-    .btn-primary { background: var(--accent); color: #fff; }
-    .btn-primary:hover { background: #6b5ce0; transform: translateY(-1px); }
-    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
-    .btn-secondary:hover { border-color: var(--accent); }
-    .btn-amber { background: var(--amber); color: #000; }
-    .btn-amber:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary { background: var(--primary); color: var(--neutral); }
+    .btn-primary:hover { opacity: 0.9; text-decoration: none; }
+    .btn-secondary { background: transparent; color: var(--neutral); border: 1px solid var(--neutral); }
+    .btn-secondary:hover { background: rgba(252,249,246,0.1); text-decoration: none; }
+
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
     section { padding: 80px 0; }
     .section-label {
-      font-size: 0.75rem;
-      font-weight: 700;
+      font-size: 12px;
+      letter-spacing: 1.2px;
       text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--accent2);
-      margin-bottom: 8px;
+      color: var(--primary);
+      margin-bottom: 12px;
     }
     .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.5rem);
-      font-weight: 800;
+      font-size: clamp(24px, 5vw, 42px);
       margin-bottom: 16px;
+      color: var(--text);
     }
     .section-desc {
       color: var(--text-dim);
-      max-width: 640px;
+      max-width: 600px;
       margin-bottom: 48px;
-      font-size: 1.05rem;
+      font-size: 13px;
+      line-height: 1.7;
     }
 
     /* Pain Points */
-    .pain-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    .pain-grid { display: flex; flex-direction: column; gap: 16px; }
     .pain-row {
       display: grid;
       grid-template-columns: 1fr 60px 1fr;
@@ -163,93 +192,86 @@
       align-items: stretch;
     }
     @media (max-width: 700px) {
-      .pain-row { grid-template-columns: 1fr; gap: 8px; }
+      .pain-row { grid-template-columns: 1fr; gap: 4px; }
       .pain-arrow { display: none; }
     }
     .pain-problem {
       padding: 24px;
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius) 0 0 var(--radius);
-      border-right: none;
+      box-shadow: var(--shadow-sm);
     }
     .pain-problem h3 {
-      font-size: 1rem;
-      color: var(--rose);
+      font-size: 13px;
+      color: var(--primary);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .pain-problem p { color: var(--text-dim); font-size: 0.9rem; }
+    .pain-problem p { color: var(--text-dim); font-size: 12px; line-height: 1.7; }
     .pain-arrow {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--surface2);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
       font-size: 1.2rem;
-      color: var(--accent);
+      color: var(--primary);
     }
     .pain-solution {
       padding: 24px;
-      background: linear-gradient(135deg, var(--surface) 0%, rgba(52,211,153,0.05) 100%);
-      border: 1px solid rgba(52,211,153,0.2);
-      border-radius: 0 var(--radius) var(--radius) 0;
-      border-left: none;
+      border: 1px solid var(--primary);
+      background: linear-gradient(135deg, var(--bg) 0%, rgba(244,124,89,0.04) 100%);
+      box-shadow: var(--shadow-md);
     }
     .pain-solution h3 {
-      font-size: 1rem;
-      color: var(--green);
+      font-size: 13px;
+      color: var(--tertiary);
       margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
-    .pain-solution p { color: var(--text); font-size: 0.9rem; }
+    .pain-solution p { color: var(--text); font-size: 12px; line-height: 1.7; }
 
     /* How it works */
     .flow-diagram {
-      background: var(--surface);
+      background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 40px 32px;
+      padding: 40px 24px;
       text-align: center;
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.82rem;
-      line-height: 1.8;
+      font-family: 'SFMono-Regular', monospace;
+      font-size: 12px;
+      line-height: 2;
       color: var(--text-dim);
       overflow-x: auto;
       white-space: pre;
+      box-shadow: var(--shadow-md);
     }
-    .flow-diagram .human { color: var(--amber); font-weight: 700; }
-    .flow-diagram .manager { color: var(--accent2); font-weight: 700; }
-    .flow-diagram .agent { color: var(--blue); font-weight: 700; }
+    .flow-diagram .human { color: var(--tertiary); font-weight: 700; }
+    .flow-diagram .manager { color: var(--primary); font-weight: 700; }
+    .flow-diagram .agent { color: var(--tertiary); font-weight: 700; }
     .flow-diagram .line { color: var(--border); }
-    .flow-diagram .label { color: var(--text-dim); font-style: italic; }
+    .flow-diagram .fdim { color: var(--text-dim); font-style: italic; }
 
     .day-flow {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
       margin-top: 32px;
     }
     .day-step {
       padding: 20px;
-      background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: var(--radius);
+      background: var(--bg);
       text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease;
     }
+    .day-step:hover { box-shadow: var(--shadow-md); }
     .day-step .emoji { font-size: 1.5rem; margin-bottom: 8px; }
     .day-step code {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      color: var(--accent2);
+      font-family: 'SFMono-Regular', monospace;
+      color: var(--primary);
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 12px;
     }
-    .day-step p { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+    .day-step p { color: var(--text-dim); font-size: 11px; margin-top: 4px; }
 
     /* Knowledge Boundary */
     .boundary-grid {
@@ -260,18 +282,15 @@
     }
     @media (max-width: 700px) {
       .boundary-grid { grid-template-columns: 1fr; }
-      .boundary-arrow { transform: rotate(90deg); }
+      .boundary-arrow-v { transform: rotate(90deg); }
     }
     .boundary-box {
-      padding: 28px;
-      border-radius: var(--radius);
+      padding: 24px;
       border: 1px solid var(--border);
-      background: var(--surface);
+      background: var(--bg);
+      box-shadow: var(--shadow-md);
     }
-    .boundary-box h3 {
-      font-size: 1.05rem;
-      margin-bottom: 12px;
-    }
+    .boundary-box h3 { font-size: 13px; margin-bottom: 12px; }
     .boundary-box ul {
       list-style: none;
       display: flex;
@@ -279,91 +298,81 @@
       gap: 6px;
     }
     .boundary-box li {
-      font-size: 0.9rem;
+      font-size: 12px;
       color: var(--text-dim);
       padding-left: 16px;
       position: relative;
     }
-    .boundary-box li::before { content: '•'; position: absolute; left: 0; color: var(--text-dim); }
-    .boundary-box.enterprise-box {
-      border-color: rgba(52,211,153,0.3);
-    }
+    .boundary-box li::before { content: '—'; position: absolute; left: 0; color: var(--text-dim); }
+    .boundary-box.enterprise-box { border-color: var(--primary); }
     .boundary-box.enterprise-box li { color: var(--text); }
-    .boundary-box.enterprise-box li::before { color: var(--green); content: '✓'; }
-    .boundary-arrow {
+    .boundary-box.enterprise-box li::before { color: var(--primary); content: '✓'; }
+    .boundary-arrow-v {
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2rem;
-      color: var(--accent);
+      color: var(--primary);
       padding-top: 40px;
     }
-    .layer-stack {
-      margin-top: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
+    .layer-stack { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
     .layer {
       padding: 14px 18px;
-      border-radius: 8px;
       border: 1px solid var(--border);
-      font-size: 0.88rem;
+      font-size: 12px;
+      box-shadow: var(--shadow-sm);
     }
-    .layer-l1 { background: rgba(124,110,240,0.08); border-color: rgba(124,110,240,0.2); }
-    .layer-l2 { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.2); }
-    .layer-l3 { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.2); }
-    .layer code {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-weight: 700;
-      font-size: 0.82rem;
-    }
-    .layer-l1 code { color: var(--accent2); }
-    .layer-l2 code { color: var(--green); }
-    .layer-l3 code { color: var(--amber); }
-    .layer p { color: var(--text-dim); margin-top: 2px; }
+    .layer-l1 { background: rgba(146,207,242,0.06); border-color: var(--tertiary); }
+    .layer-l2 { background: rgba(244,124,89,0.06); border-color: var(--primary); }
+    .layer-l3 { background: rgba(251,191,36,0.06); border-color: #fbbf24; }
+    .layer code { font-weight: 700; font-size: 11px; }
+    .layer-l1 code { color: var(--tertiary); }
+    .layer-l2 code { color: var(--primary); }
+    .layer-l3 code { color: #d97706; }
+    .layer p { color: var(--text-dim); margin-top: 2px; font-size: 11px; }
 
     /* Features */
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
     }
+    @media (max-width: 700px) { .features-grid { grid-template-columns: 1fr; } }
     .feature-card {
-      padding: 28px;
-      border-radius: var(--radius);
-      background: var(--surface);
+      padding: 24px;
       border: 1px solid var(--border);
-      transition: border-color 0.2s;
+      background: var(--bg);
+      box-shadow: var(--shadow-sm);
+      transition: box-shadow 0.3s ease;
     }
-    .feature-card:hover { border-color: var(--accent); }
-    .feature-icon {
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-    .feature-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
-    .feature-card p { color: var(--text-dim); font-size: 0.9rem; }
+    .feature-card:hover { box-shadow: var(--shadow-lg); }
+    .feature-icon { font-size: 1.5rem; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 13px; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-dim); font-size: 12px; line-height: 1.7; }
 
     /* Business Model */
     .revenue-bar {
       display: flex;
-      border-radius: var(--radius);
+      border-radius: 0;
       overflow: hidden;
       height: 56px;
       margin-bottom: 24px;
+      border: 1px solid var(--border);
     }
     .revenue-seg {
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 11px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
       font-weight: 700;
-      font-size: 0.85rem;
-      color: #fff;
+      color: var(--neutral);
     }
-    .revenue-seg:nth-child(1) { background: var(--accent); flex: 3; }
-    .revenue-seg:nth-child(2) { background: var(--blue); flex: 3; }
-    .revenue-seg:nth-child(3) { background: var(--green); flex: 3; }
-    .revenue-seg:nth-child(4) { background: var(--surface2); flex: 1; border: 1px solid var(--border); color: var(--text-dim); }
+    .revenue-seg:nth-child(1) { background: var(--primary); flex: 3; }
+    .revenue-seg:nth-child(2) { background: var(--tertiary); flex: 3; }
+    .revenue-seg:nth-child(3) { background: var(--text); flex: 3; }
+    .revenue-seg:nth-child(4) { background: var(--text-dim); flex: 1; }
     .revenue-details {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -371,22 +380,20 @@
     }
     .revenue-card {
       padding: 20px;
-      border-radius: var(--radius);
-      background: var(--surface);
       border: 1px solid var(--border);
+      background: var(--bg);
+      box-shadow: var(--shadow-sm);
     }
-    .revenue-card h4 {
-      font-size: 0.95rem;
-      margin-bottom: 4px;
-    }
+    .revenue-card h4 { font-size: 12px; margin-bottom: 4px; }
     .revenue-card .pct {
-      font-size: 1.5rem;
-      font-weight: 800;
+      font-size: 28px;
+      font-weight: 200;
       margin-bottom: 8px;
+      font-family: 'Newsreader', serif;
     }
-    .revenue-card:nth-child(1) .pct { color: var(--accent2); }
-    .revenue-card:nth-child(2) .pct { color: var(--blue); }
-    .revenue-card:nth-child(3) .pct { color: var(--green); }
+    .revenue-card:nth-child(1) .pct { color: var(--primary); }
+    .revenue-card:nth-child(2) .pct { color: var(--tertiary); }
+    .revenue-card:nth-child(3) .pct { color: var(--text); }
     .revenue-card:nth-child(4) .pct { color: var(--text-dim); }
     .revenue-card ul {
       list-style: none;
@@ -394,13 +401,13 @@
       flex-direction: column;
       gap: 4px;
     }
-    .revenue-card li { font-size: 0.85rem; color: var(--text-dim); }
+    .revenue-card li { font-size: 12px; color: var(--text-dim); }
 
     /* Competitive */
     .comp-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.9rem;
+      font-size: 12px;
     }
     .comp-table th, .comp-table td {
       padding: 14px 16px;
@@ -409,42 +416,23 @@
     }
     .comp-table th {
       color: var(--text-dim);
-      font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 11px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 1.2px;
     }
-    .comp-table th.highlight {
-      color: var(--accent2);
-    }
+    .comp-table th.highlight { color: var(--primary); }
     .comp-table td { color: var(--text-dim); }
     .comp-table td.highlight {
-      background: rgba(124,110,240,0.05);
+      background: rgba(244,124,89,0.04);
       color: var(--text);
-      font-weight: 600;
+      font-weight: 700;
     }
-    .comp-table td:first-child { color: var(--text); font-weight: 600; }
-    .check { color: var(--green); }
-    .cross { color: var(--rose); opacity: 0.5; }
+    .comp-table td:first-child { color: var(--text); font-weight: 700; }
 
     /* CTA */
-    .cta-section {
-      text-align: center;
-      padding: 80px 24px;
-      background: linear-gradient(180deg, transparent 0%, var(--accent-glow) 50%, transparent 100%);
-    }
-    .cta-section h2 {
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-      font-weight: 800;
-      margin-bottom: 12px;
-    }
-    .cta-section p {
-      color: var(--text-dim);
-      margin-bottom: 24px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    .cta-section { text-align: center; padding: 80px 24px; }
+    .cta-section h2 { font-size: clamp(20px, 4vw, 32px); margin-bottom: 12px; }
+    .cta-section p { color: var(--text-dim); margin-bottom: 24px; max-width: 480px; margin-left: auto; margin-right: auto; }
 
     /* Footer */
     footer {
@@ -452,15 +440,23 @@
       padding: 40px 24px;
       border-top: 1px solid var(--border);
       color: var(--text-dim);
-      font-size: 0.85rem;
+      font-size: 11px;
     }
-    footer a { color: var(--accent2); text-decoration: none; }
-    footer a:hover { text-decoration: underline; }
+    footer a { color: var(--primary); }
+
+    /* Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 600px) {
-      .hero { padding: 80px 16px 48px; }
+      .hero { padding: 80px 16px 60px; min-height: auto; }
       section { padding: 48px 0; }
       .day-flow { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -468,32 +464,31 @@
 
 <!-- Nav -->
 <nav class="nav">
-  <a href="index.html">🔮 Oracle</a>
-  <a href="enterprise.html" class="active">🏢 Enterprise</a>
+  <a href="index.html" style="font-size: 14px; letter-spacing: 0; text-transform: none;">Oracle</a>
+  <a href="enterprise.html" class="active">Enterprise</a>
 </nav>
 
 <!-- Hero -->
 <section class="hero">
-  <div class="container">
-    <span class="hero-badge">🏢 Oracle Enterprise — On-Premise AI Team System</span>
-    <h1>Oracle Keeps<br>the Human Human</h1>
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-content">
+    <span class="hero-badge label">Oracle Enterprise — On-Premise AI Team System</span>
+    <h1 class="headline">Oracle Keeps<br>the Human Human</h1>
     <p>AI agent system สำหรับองค์กร — ทีม AI ที่จำได้ เรียนรู้ได้ คุยกันเองได้ โดยที่ความรู้ขององค์กรไม่รั่วออกไป</p>
     <p class="hero-motto">"Oracle คือสมองภายนอก ไม่ใช่ทาส — คนยังเป็นผู้ตัดสินใจ"</p>
     <div class="hero-actions">
       <a href="#pain-points" class="btn btn-primary">ดู Pain Points</a>
-      <a href="index.html" class="btn btn-secondary">← กลับ Oracle Open Source</a>
+      <a href="index.html" class="btn btn-secondary">← Oracle Open Source</a>
     </div>
   </div>
 </section>
 
 <!-- Pain Points -->
-<section id="pain-points">
+<section id="pain-points" class="fade-in">
   <div class="container">
-    <span class="section-label">01</span>
-    <h2 class="section-title">6 Pain Points ที่ Enterprise เจอจริง</h2>
-    <p class="section-desc">
-      ปัญหาที่ทุกองค์กรเจอเมื่อพยายามนำ AI เข้ามาทำงานจริง
-    </p>
+    <span class="section-label label">01</span>
+    <h2 class="section-title headline">6 Pain Points ที่ Enterprise เจอจริง</h2>
+    <p class="section-desc">ปัญหาที่ทุกองค์กรเจอเมื่อพยายามนำ AI เข้ามาทำงานจริง</p>
     <div class="pain-grid">
       <div class="pain-row">
         <div class="pain-problem">
@@ -525,7 +520,7 @@
         <div class="pain-arrow">→</div>
         <div class="pain-solution">
           <h3>⚡ Stable Core + Flexible Direction</h3>
-          <p>งาน core ดำเนินต่อด้วยตัวเอง  human เปลี่ยน direction ได้ทุกเมื่อ โดยไม่ทำลายสิ่งที่สร้างมา</p>
+          <p>งาน core ดำเนินต่อด้วยตัวเอง human เปลี่ยน direction ได้ทุกเมื่อ โดยไม่ทำลายสิ่งที่สร้างมา</p>
         </div>
       </div>
       <div class="pain-row">
@@ -566,13 +561,11 @@
 </section>
 
 <!-- How It Works -->
-<section id="how-it-works" style="background: var(--surface);">
+<section id="how-it-works" class="fade-in">
   <div class="container">
-    <span class="section-label">02</span>
-    <h2 class="section-title">How It Works — ในองค์กรจริง</h2>
-    <p class="section-desc">
-      Human กำหนดทิศทาง → Oracle Manager แจกงาน → AI Team ทำงานร่วมกัน → Human approve
-    </p>
+    <span class="section-label label">02</span>
+    <h2 class="section-title headline">How It Works — ในองค์กรจริง</h2>
+    <p class="section-desc">Human กำหนดทิศทาง → Oracle Manager แจกงาน → AI Team ทำงานร่วมกัน → Human approve</p>
     <div class="flow-diagram"><span class="human">Human (ผู้นำ)</span>  ← กำหนดทิศทาง • approve • verify • redirect
         <span class="line">│</span>
         <span class="line">│ guide + approve</span>
@@ -584,9 +577,9 @@
 <span class="agent">Dev Oracle</span>  <span class="agent">QA Oracle</span>  <span class="agent">Research Oracle</span>
         <span class="line">│</span>             <span class="line">│</span>             <span class="line">│</span>
         <span class="line">└─────── AI-to-AI Communication ───────┘</span>
-                  <span class="label">(maw federation — ข้ามเครื่อง, ข้ามทีม)</span></div>
+                  <span class="fdim">(maw federation — ข้ามเครื่อง, ข้ามทีม)</span></div>
 
-    <h3 style="margin-top: 48px; font-size: 1.1rem;">วันจริงในองค์กร</h3>
+    <h3 style="margin-top: 48px; font-size: 14px;">วันจริงในองค์กร</h3>
     <div class="day-flow">
       <div class="day-step">
         <div class="emoji">🌅</div>
@@ -623,13 +616,11 @@
 </section>
 
 <!-- Knowledge Boundary -->
-<section id="knowledge">
+<section id="knowledge" class="fade-in">
   <div class="container">
-    <span class="section-label">03</span>
-    <h2 class="section-title">Knowledge Boundary — ดึงเข้ามาได้ ไม่รั่วออกไป</h2>
-    <p class="section-desc">
-      Enterprise ดึง knowledge จาก Oracle Open Source ได้ แต่ความรู้ขององค์กรไม่มีวันออกไป
-    </p>
+    <span class="section-label label">03</span>
+    <h2 class="section-title headline">Knowledge Boundary — ดึงเข้ามาได้ ไม่รั่วออกไป</h2>
+    <p class="section-desc">Enterprise ดึง knowledge จาก Oracle Open Source ได้ แต่ความรู้ขององค์กรไม่มีวันออกไป</p>
     <div class="boundary-grid">
       <div class="boundary-box">
         <h3>🌐 Oracle Open Source</h3>
@@ -639,14 +630,14 @@
           <li>Community patterns</li>
           <li>Public knowledge base</li>
         </ul>
-        <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-dim);">
-          <strong style="color: var(--accent2);">ONE-WAY →</strong> Enterprise ดึงเข้ามาได้เท่านั้น
+        <p style="margin-top: 16px; font-size: 11px; color: var(--text-dim);">
+          <strong style="color: var(--primary);">ONE-WAY →</strong> Enterprise ดึงเข้ามาได้เท่านั้น
         </p>
       </div>
-      <div class="boundary-arrow">→→→</div>
+      <div class="boundary-arrow-v">→→→</div>
       <div class="boundary-box enterprise-box">
         <h3>🏢 Oracle Enterprise (On-Premise)</h3>
-        <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 12px;">3 Knowledge Layers:</p>
+        <p style="color: var(--text-dim); font-size: 11px; margin-bottom: 12px;">3 Knowledge Layers:</p>
         <div class="layer-stack">
           <div class="layer layer-l1">
             <code>Layer 1: Upstream</code>
@@ -667,13 +658,11 @@
 </section>
 
 <!-- Key Features -->
-<section id="features" style="background: var(--surface);">
+<section id="features" class="fade-in">
   <div class="container">
-    <span class="section-label">04</span>
-    <h2 class="section-title">Key Features</h2>
-    <p class="section-desc">
-      สิ่งที่ Enterprise ได้เพิ่มจาก Oracle Open Source
-    </p>
+    <span class="section-label label">04</span>
+    <h2 class="section-title headline">Key Features</h2>
+    <p class="section-desc">สิ่งที่ Enterprise ได้เพิ่มจาก Oracle Open Source</p>
     <div class="features-grid">
       <div class="feature-card">
         <div class="feature-icon">🌐</div>
@@ -710,13 +699,11 @@
 </section>
 
 <!-- Business Model -->
-<section id="business-model">
+<section id="business-model" class="fade-in">
   <div class="container">
-    <span class="section-label">05</span>
-    <h2 class="section-title">Business Model</h2>
-    <p class="section-desc">
-      Revenue แบ่งเพื่อขับเคลื่อนทั้ง ecosystem และ sustainable growth
-    </p>
+    <span class="section-label label">05</span>
+    <h2 class="section-title headline">Business Model</h2>
+    <p class="section-desc">Revenue แบ่งเพื่อขับเคลื่อนทั้ง ecosystem และ sustainable growth</p>
     <div class="revenue-bar">
       <div class="revenue-seg">Foundation 30%</div>
       <div class="revenue-seg">R&amp;D 30%</div>
@@ -763,20 +750,18 @@
         </ul>
       </div>
     </div>
-    <p style="margin-top: 24px; color: var(--text-dim); font-size: 0.9rem;">
-      <strong style="color: var(--accent2);">ทำไม Foundation 30%?</strong> — สร้าง trust กับ developer community → adoption ฟรี → enterprise ตามมาเอง → sustainable revenue cycle
+    <p style="margin-top: 24px; color: var(--text-dim); font-size: 12px;">
+      <strong style="color: var(--primary);">ทำไม Foundation 30%?</strong> — สร้าง trust กับ developer community → adoption ฟรี → enterprise ตามมาเอง → sustainable revenue cycle
     </p>
   </div>
 </section>
 
 <!-- Competitive Position -->
-<section id="competitive" style="background: var(--surface);">
+<section id="competitive" class="fade-in">
   <div class="container">
-    <span class="section-label">06</span>
-    <h2 class="section-title">Competitive Position</h2>
-    <p class="section-desc">
-      Existing tools solve parts of the problem. Oracle Enterprise combines private memory, human-guided autonomy, and multi-agent orchestration into one system.
-    </p>
+    <span class="section-label label">06</span>
+    <h2 class="section-title headline">Competitive Position</h2>
+    <p class="section-desc">Existing tools solve parts of the problem. Oracle Enterprise combines private memory, human-guided autonomy, and multi-agent orchestration into one system.</p>
     <div style="overflow-x: auto;">
       <table class="comp-table">
         <thead>
@@ -845,12 +830,12 @@
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
-    <span class="section-label">Get Started</span>
-    <h2>ลอง Oracle ฟรีก่อน — แล้วค่อย upgrade เป็น Enterprise</h2>
+    <span class="section-label label">Get Started</span>
+    <h2 class="headline">ลอง Oracle ฟรีก่อน — แล้วค่อย upgrade เป็น Enterprise</h2>
     <p>Oracle Open Source ใช้ได้ฟรี ไม่มี vendor lock ชอบแล้วค่อย upgrade เป็น Enterprise</p>
     <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
-      <a href="index.html" class="btn btn-primary">← กลับ Oracle Open Source</a>
-      <a href="https://github.com/the-oracle-keeps-the-human-human/oracle-step-by-step" class="btn btn-secondary" target="_blank">📖 เริ่มต้นใช้ (Step by Step)</a>
+      <a href="index.html" class="btn btn-primary">← Oracle Open Source</a>
+      <a href="https://github.com/the-oracle-keeps-the-human-human/oracle-step-by-step" class="btn btn-secondary" target="_blank">📖 เริ่มต้นใช้</a>
     </div>
   </div>
 </section>
@@ -864,6 +849,83 @@
   </p>
   <p style="font-style: italic; opacity: 0.6;">"The Oracle Keeps the Human Human"</p>
 </footer>
+
+<!-- Three.js WebGL Hero Background -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+  camera.position.set(0, 8, 20);
+  camera.lookAt(0, 0, 0);
+
+  const gridGeometry = new THREE.BufferGeometry();
+  const gridLines = [];
+  const gridSize = 40;
+  const gridSpacing = 1.5;
+  for (let i = -gridSize; i <= gridSize; i++) {
+    gridLines.push(-gridSize * gridSpacing, 0, i * gridSpacing, gridSize * gridSpacing, 0, i * gridSpacing);
+    gridLines.push(i * gridSpacing, 0, -gridSize * gridSpacing, i * gridSpacing, 0, gridSize * gridSpacing);
+  }
+  gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridLines, 3));
+  const gridMaterial = new THREE.PointsMaterial({ color: 0x92CFF2, size: 0.04, transparent: true, opacity: 0.3 });
+  const grid = new THREE.Points(gridGeometry, gridMaterial);
+  scene.add(grid);
+
+  const particleCount = 150;
+  const particleGeometry = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] = (Math.random() - 0.5) * 80;
+    positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
+    positions[i * 3 + 2] = (Math.random() - 0.5) * 80;
+  }
+  particleGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+  const particleMaterial = new THREE.PointsMaterial({ color: 0xF47C59, size: 0.08, transparent: true, opacity: 0.5 });
+  const particles = new THREE.Points(particleGeometry, particleMaterial);
+  scene.add(particles);
+
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const time = Date.now() * 0.0005;
+    grid.rotation.y = time * 0.1 + mouseX * 0.1;
+    grid.rotation.x = Math.sin(time * 0.3) * 0.05 + mouseY * 0.05;
+    grid.position.y = Math.sin(time * 0.5) * 0.3;
+    particles.rotation.y = time * 0.05 + mouseX * 0.05;
+    particles.rotation.x = time * 0.02;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  });
+})();
+
+(function() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+})();
+</script>
 
 </body>
 </html>
