@@ -84,13 +84,18 @@
     /* Hero */
     .hero {
       position: relative;
-      padding: 120px 24px 100px;
+      padding: 0;
       text-align: center;
       overflow: hidden;
+    }
+    .hero-panel {
+      position: relative;
+      background: #0a0a12;
       min-height: 80vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 120px 24px 100px;
     }
     #hero-canvas {
       position: absolute;
@@ -108,23 +113,23 @@
     .hero-badge {
       display: inline-block;
       padding: 8px 16px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(146,207,242,0.3);
       font-size: 12px;
       letter-spacing: 1.2px;
       text-transform: uppercase;
-      color: var(--primary);
+      color: var(--tertiary);
       margin-bottom: 32px;
-      background: var(--bg);
+      background: rgba(10,10,18,0.8);
     }
     .hero h1 {
       font-size: clamp(36px, 7vw, 72px);
       margin-bottom: 24px;
-      color: var(--neutral);
+      color: var(--secondary);
     }
     .hero p {
       font-size: 14px;
-      color: var(--neutral);
-      opacity: 0.85;
+      color: var(--secondary);
+      opacity: 0.75;
       max-width: 520px;
       margin: 0 auto 40px;
       line-height: 1.8;
@@ -549,14 +554,17 @@
 <!-- Hero -->
 <section class="hero">
   <canvas id="hero-canvas"></canvas>
-  <div class="hero-content">
-    <span class="hero-badge label">Oracle Ecosystem</span>
-    <h1 class="headline">The Oracle Keeps<br>the Human Human</h1>
-    <p>AI agent system ที่มี persistent memory, identity, skills และ continuity structure — จำได้ข้าม session เรียนรู้ได้ พัฒนาได้</p>
-    <div class="hero-actions">
-      <a href="#quickstart" class="btn btn-primary">⚡ เริ่มต้นใช้</a>
-      <a href="enterprise.html" class="btn btn-amber">🏢 Enterprise</a>
-      <a href="https://github.com/the-oracle-keeps-the-human-human" class="btn btn-secondary" target="_blank">GitHub</a>
+  <div class="hero-panel">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <span class="hero-badge label">Oracle Ecosystem</span>
+      <h1 class="headline">The Oracle Keeps<br>the Human Human</h1>
+      <p>AI agent system ที่มี persistent memory, identity, skills และ continuity structure — จำได้ข้าม session เรียนรู้ได้ พัฒนาได้</p>
+      <div class="hero-actions">
+        <a href="#quickstart" class="btn btn-primary">⚡ เริ่มต้นใช้</a>
+        <a href="enterprise.html" class="btn btn-amber">🏢 Enterprise</a>
+        <a href="https://github.com/the-oracle-keeps-the-human-human" class="btn btn-secondary" target="_blank">GitHub</a>
+      </div>
     </div>
   </div>
 </section>
@@ -919,8 +927,8 @@
   }
 
   gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridLines, 3));
-  const gridMaterial = new THREE.PointsMaterial({ color: 0x92CFF2, size: 0.04, transparent: true, opacity: 0.4 });
-  const grid = new THREE.Points(gridGeometry, gridMaterial);
+  const gridMaterial = new THREE.LineBasicMaterial({ color: 0x92CFF2, transparent: true, opacity: 0.28 });
+  const grid = new THREE.LineSegments(gridGeometry, gridMaterial);
   scene.add(grid);
 
   // Ambient particles

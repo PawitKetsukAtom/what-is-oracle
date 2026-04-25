@@ -84,13 +84,18 @@
     /* Hero */
     .hero {
       position: relative;
-      padding: 120px 24px 100px;
+      padding: 0;
       text-align: center;
       overflow: hidden;
+    }
+    .hero-panel {
+      position: relative;
+      background: #0a0a12;
       min-height: 70vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      padding: 120px 24px 100px;
     }
     #hero-canvas {
       position: absolute;
@@ -112,7 +117,7 @@
       text-transform: uppercase;
       color: var(--tertiary);
       margin-bottom: 32px;
-      background: var(--bg);
+      background: rgba(10,10,18,0.8);
     }
     .hero h1 {
       font-size: clamp(32px, 6vw, 60px);
@@ -122,7 +127,7 @@
     .hero p {
       font-size: 14px;
       color: var(--neutral);
-      opacity: 0.85;
+      opacity: 0.75;
       max-width: 580px;
       margin: 0 auto 24px;
       line-height: 1.8;
@@ -470,15 +475,17 @@
 
 <!-- Hero -->
 <section class="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-content">
-    <span class="hero-badge label">Oracle Enterprise — On-Premise AI Team System</span>
-    <h1 class="headline">Oracle Keeps<br>the Human Human</h1>
-    <p>AI agent system สำหรับองค์กร — ทีม AI ที่จำได้ เรียนรู้ได้ คุยกันเองได้ โดยที่ความรู้ขององค์กรไม่รั่วออกไป</p>
-    <p class="hero-motto">"Oracle คือสมองภายนอก ไม่ใช่ทาส — คนยังเป็นผู้ตัดสินใจ"</p>
-    <div class="hero-actions">
-      <a href="#pain-points" class="btn btn-primary">ดู Pain Points</a>
-      <a href="index.html" class="btn btn-secondary">← Oracle Open Source</a>
+  <div class="hero-panel">
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-content">
+      <span class="hero-badge label">Oracle Enterprise — On-Premise AI Team System</span>
+      <h1 class="headline">Oracle Keeps<br>the Human Human</h1>
+      <p>AI agent system สำหรับองค์กร — ทีม AI ที่จำได้ เรียนรู้ได้ คุยกันเองได้ โดยที่ความรู้ขององค์กรไม่รั่วออกไป</p>
+      <p class="hero-motto">"Oracle คือสมองภายนอก ไม่ใช่ทาส — คนยังเป็นผู้ตัดสินใจ"</p>
+      <div class="hero-actions">
+        <a href="#pain-points" class="btn btn-primary">ดู Pain Points</a>
+        <a href="index.html" class="btn btn-secondary">← Oracle Open Source</a>
+      </div>
     </div>
   </div>
 </section>
@@ -875,8 +882,8 @@
     gridLines.push(i * gridSpacing, 0, -gridSize * gridSpacing, i * gridSpacing, 0, gridSize * gridSpacing);
   }
   gridGeometry.setAttribute('position', new THREE.Float32BufferAttribute(gridLines, 3));
-  const gridMaterial = new THREE.PointsMaterial({ color: 0x92CFF2, size: 0.04, transparent: true, opacity: 0.3 });
-  const grid = new THREE.Points(gridGeometry, gridMaterial);
+  const gridMaterial = new THREE.LineBasicMaterial({ color: 0x92CFF2, transparent: true, opacity: 0.28 });
+  const grid = new THREE.LineSegments(gridGeometry, gridMaterial);
   scene.add(grid);
 
   const particleCount = 150;
