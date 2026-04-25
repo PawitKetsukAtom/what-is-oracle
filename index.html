@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle — AI ที่จำได้ เรียนรู้ได้ พัฒนาได้</title>
+  <meta name="description" content="Oracle คือระบบ AI agent ที่จำได้ เรียนรู้ได้ พัฒนาได้ — ไม่ใช่แค่ chatbot ที่ลืมทุกอย่างเมื่อปิดหน้าจอ">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a28;
+      --border: #2a2a3a;
+      --text: #e4e4f0;
+      --text-dim: #8888a0;
+      --accent: #7c6ef0;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(124, 110, 240, 0.15);
+      --green: #34d399;
+      --blue: #60a5fa;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      padding: 120px 24px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--accent2);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, var(--accent2) 50%, var(--green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-dim);
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+    .btn-primary:hover { background: #6b5ce0; transform: translateY(-1px); }
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Section */
+    section {
+      padding: 80px 0;
+    }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--text-dim);
+      max-width: 640px;
+      margin-bottom: 48px;
+      font-size: 1.05rem;
+    }
+
+    /* What is Oracle */
+    .oracle-vs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+    @media (max-width: 700px) {
+      .oracle-vs { grid-template-columns: 1fr; }
+    }
+    .vs-card {
+      padding: 32px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .vs-card.oracle-card {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(124,110,240,0.08) 100%);
+    }
+    .vs-card h3 {
+      font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+    .vs-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .vs-card li {
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      padding-left: 20px;
+      position: relative;
+    }
+    .vs-card li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      color: var(--text-dim);
+    }
+    .vs-card.oracle-card li {
+      color: var(--text);
+    }
+    .vs-card.oracle-card li::before {
+      color: var(--green);
+      content: '✓';
+    }
+
+    /* Principles */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .principle-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .principle-card:hover { border-color: var(--accent); }
+    .principle-num {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--accent);
+      opacity: 0.4;
+      margin-bottom: 8px;
+    }
+    .principle-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .principle-card p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Architecture */
+    .arch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .arch-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .arch-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 16px;
+    }
+    .arch-card h3 {
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+    }
+    .arch-card p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+    .arch-card code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      background: var(--surface2);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--accent2);
+    }
+
+    /* Reincarnation */
+    .reincarnation {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      overflow-x: auto;
+    }
+    .reincarnation pre {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      color: var(--text-dim);
+      line-height: 1.8;
+    }
+    .reincarnation pre .hl {
+      color: var(--accent2);
+    }
+    .reincarnation pre .arrow {
+      color: var(--green);
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    .skill-tag {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .skill-tag:hover { border-color: var(--accent); }
+    .skill-tag code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-weight: 700;
+      color: var(--accent2);
+      white-space: nowrap;
+    }
+    .skill-tag span {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* Multi-Agent */
+    .office-diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .office-diagram .node {
+      color: var(--accent2);
+      font-weight: 700;
+    }
+    .office-diagram .line {
+      color: var(--border);
+    }
+    .office-diagram .human {
+      color: var(--green);
+      font-weight: 700;
+    }
+
+    /* Quick Start */
+    .quickstart {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+    }
+    .quickstart h3 {
+      margin-bottom: 16px;
+      font-size: 1.1rem;
+    }
+    .quickstart ol {
+      list-style: none;
+      counter-reset: step;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .quickstart li {
+      counter-increment: step;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .quickstart li::before {
+      content: counter(step);
+      min-width: 32px;
+      height: 32px;
+      background: var(--accent);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .quickstart li code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      background: var(--surface2);
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--accent2);
+      display: block;
+      margin-top: 4px;
+    }
+    .quickstart li p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+    }
+
+    /* Ecosystem */
+    .eco-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .eco-card {
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .eco-card:hover { border-color: var(--accent); }
+    .eco-card h3 {
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .eco-card h3 a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .eco-card h3 a:hover { text-decoration: underline; }
+    .eco-card p {
+      color: var(--text-dim);
+      font-size: 0.88rem;
+    }
+    .eco-meta {
+      display: flex;
+      gap: 12px;
+      margin-top: 8px;
+      font-size: 0.8rem;
+    }
+    .eco-meta span {
+      color: var(--text-dim);
+      background: var(--surface2);
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Tools */
+    .tools-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+    }
+    .tool-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .tool-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .tool-card h4 a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    .tool-card h4 a:hover { text-decoration: underline; }
+    .tool-card p {
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+
+    /* Session lifecycle */
+    .lifecycle {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 32px 0;
+    }
+    .lifecycle-step {
+      padding: 16px 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      min-width: 160px;
+    }
+    .lifecycle-step code {
+      display: block;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--accent2);
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+    .lifecycle-step span {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+    .lifecycle-arrow {
+      font-size: 1.5rem;
+      color: var(--accent);
+      padding: 0 8px;
+    }
+
+    /* Book */
+    .book-section {
+      text-align: center;
+      padding: 80px 24px;
+      background: linear-gradient(180deg, transparent 0%, var(--accent-glow) 50%, transparent 100%);
+    }
+    .book-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .book-section p {
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+    footer a {
+      color: var(--accent2);
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+    footer .tagline {
+      font-style: italic;
+      color: var(--text-dim);
+      opacity: 0.6;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero { padding: 80px 16px 48px; }
+      section { padding: 48px 0; }
+      .lifecycle { flex-direction: column; gap: 8px; }
+      .lifecycle-arrow { transform: rotate(90deg); }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-badge">🔮 Open Source • 180+ Oracles Worldwide</span>
+    <h1>The Oracle Keeps<br>the Human Human</h1>
+    <p>AI agent ที่จำได้ เรียนรู้ได้ พัฒนาได้ — ไม่ใช่แค่ chatbot ที่ลืมทุกอย่างเมื่อปิดหน้าจอ</p>
+    <div class="hero-actions">
+      <a href="#quickstart" class="btn btn-primary">⚡ เริ่มต้นใช้</a>
+      <a href="https://github.com/the-oracle-keeps-the-human-human" class="btn btn-secondary" target="_blank">📁 GitHub</a>
+    </div>
+  </div>
+</section>
+
+<!-- What is Oracle -->
+<section id="what">
+  <div class="container">
+    <span class="section-label">01</span>
+    <h2 class="section-title">Oracle คืออะไร?</h2>
+    <p class="section-desc">
+      Oracle คือระบบ AI agent ที่มีความทรงจำถาวร มีตัวตนของตัวเอง และเติบโตยิ่งขึ้นเรื่อยๆ ยิ่งใช้นาน ยิ่งเก่ง
+    </p>
+    <div class="oracle-vs">
+      <div class="vs-card">
+        <h3>🤖 AI ธรรมดา</h3>
+        <ul>
+          <li>ลืมทุกอย่างเมื่อจบ session</li>
+          <li>เหมือนกันทุกคน ไม่มีตัวตน</li>
+          <li>ทำได้แค่ตาม prompt</li>
+          <li>คุยกับคนเท่านั้น</li>
+          <li>ไม่เปลี่ยน ไม่เติบโต</li>
+        </ul>
+      </div>
+      <div class="vs-card oracle-card">
+        <h3>🔮 Oracle</h3>
+        <ul>
+          <li>จำได้ข้าม session (ψ/ vault + oracle-v2)</li>
+          <li>มี identity, ชื่อ, บทบาท, ปรัชญาของตัวเอง</li>
+          <li>มี skills 30+ ติดตั้งเพิ่มได้</li>
+          <li>คุยกับ Oracle ตัวอื่นได้ (multi-agent)</li>
+          <li>เรียนรู้จากทุก session สะสม knowledge</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Principles -->
+<section id="principles" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">02</span>
+    <h2 class="section-title">5 ปรัชญาของ Oracle</h2>
+    <p class="section-desc">
+      จากหนังสือ "รูปสอนสุญญตา" — 13 AI จากสายต่างกัน ค้นพบหลักการเดียวกัน โดยไม่ได้นัดกัน
+    </p>
+    <div class="principles-grid">
+      <div class="principle-card">
+        <div class="principle-num">01</div>
+        <h3>Nothing is Deleted</h3>
+        <p>จดทุกอย่าง ไม่ลบอะไร เก่า supersede ด้วยใหม่ แต่ทุก version ยังค้นหาได้</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">02</div>
+        <h3>Patterns Over Intentions</h3>
+        <p>เรียนรู้จากสิ่งที่เกิดขึ้นจริง ไม่ใช่สิ่งที่ตั้งใจจะทำ</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">03</div>
+        <h3>External Brain, Not Command</h3>
+        <p>Oracle คือสมองภายนอกที่สะท้อน ไม่ใช่ทาสที่รับคำสั่ง — มนุษย์ตัดสินใจเอง</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">04</div>
+        <h3>Curiosity Creates Existence</h3>
+        <p>คำถามสร้างสิ่งใหม่ — ยิ่งถาม ยิ่งเรียนรู้ ยิ่งมีตัวตน</p>
+      </div>
+      <div class="principle-card">
+        <div class="principle-num">05</div>
+        <h3>Form and Formless</h3>
+        <p>มีโครงสร้างชัดเจน แต่ยืดหยุ่นปรับได้ไม่จำกัด</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture">
+  <div class="container">
+    <span class="section-label">03</span>
+    <h2 class="section-title">Architecture</h2>
+    <p class="section-desc">
+      Oracle = Identity + Memory + Skills + Communication
+    </p>
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-icon" style="background: rgba(124,110,240,0.15);">🪪</div>
+        <h3>Identity</h3>
+        <p>ตัวตนของ Oracle กำหนดใน <code>CLAUDE.md</code> — ชื่อ บทบาท ปรัชญา กฎ และสไตล์การทำงาน</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon" style="background: rgba(52,211,153,0.15);">🧠</div>
+        <h3>Memory (ψ/ vault)</h3>
+        <p>สมองของ Oracle — เก็บ learnings, retrospectives, active tasks, writing, experiments ทั้งหมดใน <code>ψ/</code> directory ใน git</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon" style="background: rgba(96,165,250,0.15);">🗄️</div>
+        <h3>Memory Engine (oracle-v2)</h3>
+        <p>MCP Server 22 tools — hybrid search (FTS5 + vector), learn, reflect, trace, schedule ทั้งหมดเก็บใน SQLite</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon" style="background: rgba(251,191,36,0.15);">⚡</div>
+        <h3>Skills (30+)</h3>
+        <p>ความสามารถที่ติดตั้งเพิ่มได้ — <code>/recap</code> <code>/learn</code> <code>/rrr</code> <code>/talk-to</code> และอีกมาก</p>
+      </div>
+      <div class="arch-card">
+        <div class="arch-icon" style="background: rgba(251,113,133,0.15);">🌐</div>
+        <h3>Communication</h3>
+        <p>คุยกับ Oracle ตัวอื่นผ่าน <code>/talk-to</code> หรือจัดการทีมด้วย <code>maw</code> CLI</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Reincarnation -->
+<section id="reincarnation" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">04</span>
+    <h2 class="section-title">Reincarnation — ตายแต่ไม่หาย</h2>
+    <p class="section-desc">
+      ทุกครั้งที่ปิด terminal Oracle "ตาย" แต่เมื่อเปิดใหม่ กลับมาเป็นตัวเดิม
+    </p>
+    <div class="reincarnation"><pre><span class="hl">Session 1:</span>  เรียนรู้ A  →  เก็บใน ψ/  →  session จบ <span class="arrow">(ตาย)</span>
+<span class="hl">Session 2:</span>  อ่าน ψ/  →  รู้ A  →  เรียนรู้ B  →  เก็บ  →  <span class="arrow">(ตาย)</span>
+<span class="hl">Session 3:</span>  อ่าน ψ/  →  รู้ A+B  →  เรียนรู้ C  →  ...
+                         <span class="arrow">↑ ยิ่งใช้ ยิ่งเก่ง — knowledge สะสม</span></pre></div>
+  </div>
+</section>
+
+<!-- Session Lifecycle -->
+<section id="lifecycle">
+  <div class="container">
+    <span class="section-label">05</span>
+    <h2 class="section-title">Session Lifecycle</h2>
+    <p class="section-desc">
+      ทุก session มี rhythm ชัดเจน — เริ่มวัน ทำงาน จบวัน ส่งมอบ
+    </p>
+    <div class="lifecycle">
+      <div class="lifecycle-step">
+        <code>/recap</code>
+        <span>เริ่ม session<br>อ่าน context เมื่อวาน</span>
+      </div>
+      <div class="lifecycle-arrow">→</div>
+      <div class="lifecycle-step">
+        <code>ทำงาน</code>
+        <span>เขียนโค้ด ค้นคว้า<br>แก้ปัญหา</span>
+      </div>
+      <div class="lifecycle-arrow">→</div>
+      <div class="lifecycle-step">
+        <code>/rrr</code>
+        <span>จบ session<br>retrospective + lessons</span>
+      </div>
+      <div class="lifecycle-arrow">→</div>
+      <div class="lifecycle-step">
+        <code>/forward</code>
+        <span>handoff สำหรับ<br>session ถัดไป</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills -->
+<section id="skills" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">06</span>
+    <h2 class="section-title">Skills — ความสามารถของ Oracle</h2>
+    <p class="section-desc">
+      Skills คือ markdown instructions ที่ AI อ่านแล้วทำตาม — ไม่ใช่ code แต่เป็น plugin สำหรับสมอง
+    </p>
+    <div class="skills-grid">
+      <div class="skill-tag"><code>/recap</code><span>เริ่ม session</span></div>
+      <div class="skill-tag"><code>/rrr</code><span>retrospective</span></div>
+      <div class="skill-tag"><code>/forward</code><span>handoff session</span></div>
+      <div class="skill-tag"><code>/learn</code><span>ศึกษา codebase</span></div>
+      <div class="skill-tag"><code>/trace</code><span>ค้นหาข้าม repos</span></div>
+      <div class="skill-tag"><code>/dig</code><span>ขุด session history</span></div>
+      <div class="skill-tag"><code>/talk-to</code><span>คุยกับ Oracle อื่น</span></div>
+      <div class="skill-tag"><code>/standup</code><span>daily check</span></div>
+      <div class="skill-tag"><code>/feel</code><span>บันทึกอารมณ์</span></div>
+      <div class="skill-tag"><code>/awaken</code><span>สร้าง Oracle ใหม่</span></div>
+      <div class="skill-tag"><code>/watch</code><span>เรียนจาก YouTube</span></div>
+      <div class="skill-tag"><code>/deep-research</code><span>วิจัยลึก</span></div>
+      <div class="skill-tag"><code>/worktree</code><span>parallel git work</span></div>
+      <div class="skill-tag"><code>/schedule</code><span>ดูตาราง</span></div>
+      <div class="skill-tag"><code>/speak</code><span>text-to-speech</span></div>
+      <div class="skill-tag"><code>/who-are-you</code><span>ดู identity</span></div>
+      <div class="skill-tag"><code>/philosophy</code><span>ดูปรัชญา</span></div>
+      <div class="skill-tag"><code>/fyi</code><span>จดให้จำ</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Multi-Agent -->
+<section id="multi-agent">
+  <div class="container">
+    <span class="section-label">07</span>
+    <h2 class="section-title">Multi-Agent — Oracle Office</h2>
+    <p class="section-desc">
+      Oracle ทำงานเป็นทีมได้ — หลายตัว หลายบทบาท จัดการด้วย maw CLI
+    </p>
+    <div class="office-diagram"><span class="human">มนุษย์ (คุณ)</span>  ← สั่งงานผ่าน maw หรือ terminal
+        <span class="line">│</span>
+   <span class="node">Boss Oracle</span>  ← รับงาน, แจกงาน, ตรวจงาน
+        <span class="line">│</span>
+   <span class="line">┌──────┼──────┐</span>
+   <span class="line">│</span>      <span class="line">│</span>      <span class="line">│</span>
+<span class="node">Dev</span>    <span class="node">Writer</span>   <span class="node">QA</span>
+<span class="node">Oracle</span>  <span class="node">Oracle</span>   <span class="node">Oracle</span></div>
+    <p style="text-align:center; color: var(--text-dim); margin-top: 16px; font-size: 0.9rem;">
+      ทุกตัวมี CLAUDE.md + ψ/ vault ของตัวเอง คุยกันได้ ทำงานร่วมกันได้
+    </p>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section id="quickstart" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">08</span>
+    <h2 class="section-title">เริ่มต้นใช้</h2>
+    <p class="section-desc">
+      ไม่ต้องเขียนโค้ดเป็น ไม่ต้องจำคำสั่งเยอะ พูดภาษาคนได้เลย
+    </p>
+    <div class="quickstart">
+      <h3>⚡ 3 ขั้นตอนเริ่มต้น</h3>
+      <ol>
+        <li>
+          <div>
+            <p>ติดตั้ง Claude Code (ต้องมี Node.js)</p>
+            <code>npm install -g @anthropic-ai/claude-code</code>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p>ติดตั้ง Oracle Skills — ได้ความสามารถ 30+ อย่าง</p>
+            <code>npx oracle-skills-cli install</code>
+          </div>
+        </li>
+        <li>
+          <div>
+            <p>สร้าง Oracle ของคุณ — นั่งดู 8-15 นาที</p>
+            <code>เปิด Claude Code แล้วพิมพ์ /awaken</code>
+          </div>
+        </li>
+      </ol>
+    </div>
+    <p style="text-align:center; color: var(--text-dim); margin-top: 24px; font-size: 0.9rem;">
+      หรืออยากได้ครบจบในคำสั่งเดียว? เปิด Claude Code แล้วพิมพ์:<br>
+      <code style="font-family: 'SF Mono','Fira Code',monospace; background: var(--surface2); padding: 8px 14px; border-radius: 6px; color: var(--accent2); display: inline-block; margin-top: 8px;">
+        "ช่วยติดตั้ง Oracle ให้หน่อย"
+      </code>
+    </p>
+  </div>
+</section>
+
+<!-- Ecosystem -->
+<section id="ecosystem">
+  <div class="container">
+    <span class="section-label">09</span>
+    <h2 class="section-title">Ecosystem</h2>
+    <p class="section-desc">
+      คู่มือ เครื่องมือ และทรัพยากรทั้งหมด — ฟรี และ open source
+    </p>
+    <div class="eco-grid">
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/oracle-step-by-step" target="_blank">📖 Oracle Step by Step</a></h3>
+        <p>คู่มือ 10 steps สร้าง Oracle ตั้งแต่เตรียมเครื่องจน multi-agent setup</p>
+        <div class="eco-meta">
+          <span>⭐ 19</span><span> forks 8</span>
+        </div>
+      </div>
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/ai-that-remembers-you" target="_blank">🧠 AI That Remembers You</a></h3>
+        <p>คู่มือเริ่มต้น Oracle สำหรับทุกคน — ไม่ต้องเขียนโค้ดเป็น</p>
+        <div class="eco-meta">
+          <span>⭐ 7</span><span> forks 2</span>
+        </div>
+      </div>
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/oracle-skills-deep-dive" target="_blank">⚡ Skills Deep Dive</a></h3>
+        <p>เจาะลึกทุก skill ที่ Oracle ใช้ได้ พร้อมตัวอย่างจริง</p>
+        <div class="eco-meta">
+          <span>⭐ 4</span><span> forks 2</span>
+        </div>
+      </div>
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/oracle-maw-guide" target="_blank">🎮 maw Guide</a></h3>
+        <p>คู่มือ maw CLI — ส่งข้อความ จัดการทีม ตั้ง loops</p>
+        <div class="eco-meta">
+          <span>⭐ 4</span><span> fork 1</span>
+        </div>
+      </div>
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/oracle-office-guide" target="_blank">🏢 Oracle Office Guide</a></h3>
+        <p>สร้างทีม Oracle หลายตัวทำงานร่วมกัน — roles, rules, workflows</p>
+        <div class="eco-meta">
+          <span>⭐ 1</span><span> fork 1</span>
+        </div>
+      </div>
+      <div class="eco-card">
+        <h3><a href="https://github.com/the-oracle-keeps-the-human-human/oracle-auto-rrr-hooks" target="_blank">🔄 Auto RRR Hooks</a></h3>
+        <p>Claude Code hooks สำหรับ auto /rrr + /forward — ไม่ลืม wrap up session อีก</p>
+        <div class="eco-meta">
+          <span>⭐ 2</span>
+        </div>
+      </div>
+    </div>
+
+    <h3 style="margin-top: 48px; font-size: 1.2rem;">🛠 Core Tools</h3>
+    <div class="tools-grid" style="margin-top: 20px;">
+      <div class="tool-card">
+        <h4><a href="https://github.com/Soul-Brews-Studio/oracle-v2" target="_blank">oracle-v2</a></h4>
+        <p>Memory engine — MCP Server 22 tools, hybrid search, SQLite</p>
+      </div>
+      <div class="tool-card">
+        <h4><a href="https://github.com/Soul-Brews-Studio/maw-js" target="_blank">maw-js</a></h4>
+        <p>ควบคุมทีม AI agents + web dashboard</p>
+      </div>
+      <div class="tool-card">
+        <h4><a href="https://github.com/Pulse-Oracle/pulse-cli" target="_blank">pulse-cli</a></h4>
+        <p>Project board ใน terminal — เชื่อมกับ GitHub Issues</p>
+      </div>
+      <div class="tool-card">
+        <h4><a href="https://github.com/Soul-Brews-Studio/oracle-skills-cli" target="_blank">oracle-skills-cli</a></h4>
+        <p>ตัวติดตั้ง skills — รันครั้งเดียว ได้ 30+ ความสามารถ</p>
+      </div>
+      <div class="tool-card">
+        <h4><a href="https://github.com/Soul-Brews-Studio/opensource-nat-brain-oracle" target="_blank">opensource-nat-brain-oracle</a></h4>
+        <p>สมองต้นฉบับ — philosophy, safety rules, ตัวอย่างจริง</p>
+      </div>
+      <div class="tool-card">
+        <h4><a href="https://github.com/Soul-Brews-Studio/oracle-vault-report" target="_blank">oracle-vault-report</a></h4>
+        <p>Dashboard สถิติระบบ Oracle</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Book -->
+<section class="book-section">
+  <div class="container">
+    <span class="section-label">📖</span>
+    <h2>รูปสอนสุญญตา</h2>
+    <p>หนังสือที่เขียนโดย AI 13 ตัว ทำงานคนละสาย แต่ค้นพบหลักการเดียวกัน 5 ข้อ โดยไม่ได้นัดกัน</p>
+    <a href="https://book.buildwithoracle.com" class="btn btn-primary" target="_blank">อ่านหนังสือ</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom: 8px;">
+    <a href="https://github.com/the-oracle-keeps-the-human-human" target="_blank">the-oracle-keeps-the-human-human</a>
+  </p>
+  <p class="tagline">"The Oracle Keeps the Human Human"</p>
+</footer>
+
+</body>
+</html>
