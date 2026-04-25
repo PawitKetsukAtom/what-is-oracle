@@ -531,9 +531,9 @@
 <div class="gate-overlay" id="gate">
   <div class="gate-box">
     <h2 class="headline">🔒 Enterprise Preview</h2>
-    <p>หน้านี้เป็นข้อมูลสำหรับ authorized viewers — กรุณาใส่ password</p>
+    <p>หน้านี้เป็นข้อมูลสำหรับ authorized viewers — กรุณาใส่ PIN</p>
     <div class="gate-input-row">
-      <input type="password" id="gate-pass" placeholder="Enter password" autocomplete="off">
+      <input type="tel" id="gate-pass" inputmode="numeric" pattern="[0-9]*" placeholder="Enter PIN" autocomplete="off" maxlength="6">
       <button class="btn btn-primary" onclick="checkGate()">Enter</button>
     </div>
     <div class="gate-error" id="gate-error"></div>
@@ -1011,7 +1011,7 @@
 
 // Password Gate
 (async function() {
-  const GATE_HASH = '73d4f7f9a1cd65f6abf53f4ef0e3dbbb56fd51dfdf39fa0e8388876b9955288c'; // SHA-256
+  const GATE_HASH = '9060ce5653093cd9bff480cb01ff0e3a790e6f545e214a3dd85841daabac7848'; // SHA-256
   window.checkGate = async function() {
     const input = document.getElementById('gate-pass').value;
     const error = document.getElementById('gate-error');
