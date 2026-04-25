@@ -495,31 +495,64 @@
       margin-bottom: 32px;
       line-height: 1.7;
     }
-    .gate-input-row {
+    .gate-dots {
       display: flex;
-      gap: 8px;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 32px;
     }
-    .gate-input-row input {
-      flex: 1;
-      padding: 12px 16px;
-      font-family: 'SFMono-Regular', monospace;
-      font-size: 13px;
-      background: rgba(252,249,246,0.06);
-      border: 1px solid rgba(252,249,246,0.2);
-      color: var(--neutral);
-      outline: none;
-      transition: border-color 0.3s ease;
+    .gate-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(252,249,246,0.35);
+      transition: all 0.2s ease;
     }
-    .gate-input-row input:focus {
+    .gate-dot.filled {
+      background: var(--primary);
       border-color: var(--primary);
     }
-    .gate-input-row input::placeholder {
-      color: rgba(252,249,246,0.3);
+    .gate-dot.error {
+      border-color: #ef4444;
+      animation: gate-shake 0.4s ease;
+    }
+    @keyframes gate-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 64px);
+      gap: 10px;
+      justify-content: center;
+    }
+    .keypad-btn {
+      width: 64px;
+      height: 64px;
+      border: 1px solid rgba(252,249,246,0.2);
+      background: rgba(252,249,246,0.04);
+      color: var(--neutral);
+      font-family: 'SFMono-Regular', monospace;
+      font-size: 20px;
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .keypad-btn:hover { background: rgba(252,249,246,0.1); }
+    .keypad-btn:active { background: rgba(244,124,89,0.15); transform: scale(0.95); }
+    .keypad-btn.action {
+      font-size: 16px;
+      color: var(--primary);
     }
     .gate-error {
       color: #ef4444;
       font-size: 11px;
-      margin-top: 12px;
+      margin-top: 16px;
       min-height: 16px;
     }
     body.locked { overflow: hidden; }
@@ -532,9 +565,25 @@
   <div class="gate-box">
     <h2 class="headline">🔒 Enterprise Preview</h2>
     <p>หน้านี้เป็นข้อมูลสำหรับ authorized viewers — กรุณาใส่ PIN</p>
-    <div class="gate-input-row">
-      <input type="tel" id="gate-pass" inputmode="numeric" pattern="[0-9]*" placeholder="Enter PIN" autocomplete="off" maxlength="6">
-      <button class="btn btn-primary" onclick="checkGate()">Enter</button>
+    <div class="gate-dots" id="gate-dots">
+      <div class="gate-dot" data-i="0"></div>
+      <div class="gate-dot" data-i="1"></div>
+      <div class="gate-dot" data-i="2"></div>
+      <div class="gate-dot" data-i="3"></div>
+    </div>
+    <div class="keypad" id="keypad">
+      <button class="keypad-btn" data-key="1">1</button>
+      <button class="keypad-btn" data-key="2">2</button>
+      <button class="keypad-btn" data-key="3">3</button>
+      <button class="keypad-btn" data-key="4">4</button>
+      <button class="keypad-btn" data-key="5">5</button>
+      <button class="keypad-btn" data-key="6">6</button>
+      <button class="keypad-btn" data-key="7">7</button>
+      <button class="keypad-btn" data-key="8">8</button>
+      <button class="keypad-btn" data-key="9">9</button>
+      <button class="keypad-btn action" data-key="del">←</button>
+      <button class="keypad-btn" data-key="0">0</button>
+      <button class="keypad-btn action" data-key="go">✓</button>
     </div>
     <div class="gate-error" id="gate-error"></div>
   </div>
@@ -1009,31 +1058,62 @@
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 })();
 
-// Password Gate
+// Password Gate — Keypad UI
 (async function() {
-  const GATE_HASH = '9060ce5653093cd9bff480cb01ff0e3a790e6f545e214a3dd85841daabac7848'; // SHA-256
-  window.checkGate = async function() {
-    const input = document.getElementById('gate-pass').value;
-    const error = document.getElementById('gate-error');
-    if (!input) { error.textContent = 'Please enter a password'; return; }
-    const encoder = new TextEncoder();
-    const data = encoder.encode(input);
-    const hashBuf = await crypto.subtle.digest('SHA-256', data);
-    const hashArr = Array.from(new Uint8Array(hashBuf));
-    const hash = hashArr.map(b => b.toString(16).padStart(2, '0')).join('');
+  const GATE_HASH = '9060ce5653093cd9bff480cb01ff0e3a790e6f545e214a3dd85841daabac7848'; // SHA-256 of '2505'
+  const PIN_LENGTH = 4;
+  let pin = '';
+  const dots = document.querySelectorAll('#gate-dots .gate-dot');
+  const error = document.getElementById('gate-error');
+
+  function renderDots() {
+    dots.forEach((d, i) => {
+      d.classList.toggle('filled', i < pin.length);
+      d.classList.remove('error');
+    });
+  }
+
+  async function sha256(str) {
+    const data = new TextEncoder().encode(str);
+    const buf = await crypto.subtle.digest('SHA-256', data);
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function checkPin() {
+    if (pin.length < PIN_LENGTH) return;
+    const hash = await sha256(pin);
     if (hash === GATE_HASH) {
       document.getElementById('gate').classList.add('hidden');
       document.body.classList.remove('locked');
       document.getElementById('enterprise-content').removeAttribute('aria-hidden');
       sessionStorage.setItem('oracle-enterprise-auth', '1');
     } else {
-      error.textContent = 'Incorrect password';
+      dots.forEach(d => d.classList.add('error'));
+      error.textContent = 'Incorrect PIN';
+      setTimeout(() => { pin = ''; renderDots(); error.textContent = ''; }, 600);
     }
-  };
-  document.getElementById('gate-pass').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') window.checkGate();
-    if (e.key === 'Escape') document.getElementById('gate-error').textContent = '';
+  }
+
+  function pressKey(key) {
+    error.textContent = '';
+    if (key === 'del') { pin = pin.slice(0, -1); renderDots(); return; }
+    if (key === 'go') { checkPin(); return; }
+    if (pin.length < PIN_LENGTH) { pin += key; renderDots(); }
+    if (pin.length === PIN_LENGTH) { checkPin(); }
+  }
+
+  document.getElementById('keypad').addEventListener('click', function(e) {
+    const btn = e.target.closest('.keypad-btn');
+    if (btn) pressKey(btn.dataset.key);
   });
+
+  document.addEventListener('keydown', function(e) {
+    if (document.getElementById('gate').classList.contains('hidden')) return;
+    if (e.key >= '0' && e.key <= '9') pressKey(e.key);
+    if (e.key === 'Backspace') pressKey('del');
+    if (e.key === 'Enter') pressKey('go');
+  });
+
   if (sessionStorage.getItem('oracle-enterprise-auth') === '1') {
     document.getElementById('gate').classList.add('hidden');
     document.body.classList.remove('locked');
