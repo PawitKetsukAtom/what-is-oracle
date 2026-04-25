@@ -497,13 +497,13 @@
     <div class="pain-grid">
       <div class="pain-row">
         <div class="pain-problem">
-          <h3>💢 1. Knowledge หลุด</h3>
-          <p>คนลาออก โปรเจกต์จบ ความรู้หาย — AI ก็ลืมทุกอย่างเมื่อ session จบ</p>
+          <h3>💢 1. Knowledge รั่วออกนอกองค์กร</h3>
+          <p>Source code, business rules, customer data และ decision history ไม่ควรถูกส่งออกไปนอก enterprise boundary</p>
         </div>
         <div class="pain-arrow">→</div>
         <div class="pain-solution">
-          <h3>🧠 Persistent Memory</h3>
-          <p>ทุกอย่างเก็บใน knowledge base — "Nothing is Deleted" — ค้นหาข้ามโปรเจกต์ ข้ามทีม ได้</p>
+          <h3>🛡 Private Knowledge Boundary</h3>
+          <p>Oracle Enterprise run แบบ on-premise / private cloud — ดึง Oracle Core เข้ามาได้ แต่ enterprise knowledge ไม่ sync ออกไป</p>
         </div>
       </div>
       <div class="pain-row">
@@ -775,7 +775,7 @@
     <span class="section-label">06</span>
     <h2 class="section-title">Competitive Position</h2>
     <p class="section-desc">
-      Oracle Enterprise ทำอะไรที่ tool อื่นไม่ทำ
+      Existing tools solve parts of the problem. Oracle Enterprise combines private memory, human-guided autonomy, and multi-agent orchestration into one system.
     </p>
     <div style="overflow-x: auto;">
       <table class="comp-table">
@@ -789,52 +789,52 @@
         </thead>
         <tbody>
           <tr>
-            <td>Persistent Memory</td>
-            <td class="cross">✗</td>
-            <td>Context window เท่านั้น</td>
-            <td class="highlight">✓ ข้าม session + ข้าม project</td>
+            <td>Persistent Org Memory</td>
+            <td>Limited / provider context</td>
+            <td>Project context only</td>
+            <td class="highlight">Private org-wide memory</td>
           </tr>
           <tr>
             <td>Multi-Agent</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ Federation ข้ามทีม/เครื่อง</td>
+            <td>Not core focus</td>
+            <td>Not core focus</td>
+            <td class="highlight">Federation ข้ามทีม/เครื่อง</td>
           </tr>
           <tr>
             <td>Knowledge Sharing</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ ค้นข้าม org ได้</td>
+            <td>Cloud-dependent</td>
+            <td>Project-scoped</td>
+            <td class="highlight">Cross-org search (on-prem)</td>
           </tr>
           <tr>
             <td>On-Premise</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ 100% on-premise</td>
+            <td>Cloud-dependent</td>
+            <td>Cloud-dependent</td>
+            <td class="highlight">100% on-premise</td>
           </tr>
           <tr>
             <td>Human Control</td>
-            <td>Low</td>
+            <td>Limited</td>
             <td>Medium</td>
-            <td class="highlight">✓ High — human คือ guide</td>
+            <td class="highlight">High — human คือ guide</td>
           </tr>
           <tr>
             <td>AI-to-AI</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ maw federation</td>
+            <td>Not supported</td>
+            <td>Not supported</td>
+            <td class="highlight">maw federation</td>
           </tr>
           <tr>
             <td>Experience Injection</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ ฝากความรู้ได้ตลอดเวลา</td>
+            <td>Not supported</td>
+            <td>Not supported</td>
+            <td class="highlight">ฝากความรู้ได้ตลอดเวลา</td>
           </tr>
           <tr>
             <td>Compliance</td>
-            <td class="cross">✗</td>
-            <td class="cross">✗</td>
-            <td class="highlight">✓ Audit trail + lineage</td>
+            <td>Provider-managed</td>
+            <td>Provider-managed</td>
+            <td class="highlight">Audit trail + lineage</td>
           </tr>
         </tbody>
       </table>
