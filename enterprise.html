@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Oracle Enterprise — AI Team with Persistent Memory, On-Premise</title>
+  <meta name="description" content="Oracle Enterprise: AI agent system สำหรับองค์กร — persistent memory, multi-agent federation, guided autonomy, 100% on-premise knowledge">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a28;
+      --border: #2a2a3a;
+      --text: #e4e4f0;
+      --text-dim: #8888a0;
+      --accent: #7c6ef0;
+      --accent2: #a78bfa;
+      --accent-glow: rgba(124, 110, 240, 0.15);
+      --green: #34d399;
+      --blue: #60a5fa;
+      --amber: #fbbf24;
+      --rose: #fb7185;
+      --radius: 12px;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 24px;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav a {
+      color: var(--text-dim);
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.2s;
+    }
+    .nav a:hover { color: var(--text); background: var(--surface2); }
+    .nav a.active { color: var(--accent2); }
+    .hero {
+      position: relative;
+      padding: 120px 24px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 16px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      color: var(--amber);
+      margin-bottom: 24px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 {
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #fff 0%, var(--amber) 50%, var(--green) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero p {
+      font-size: clamp(1rem, 2.5vw, 1.3rem);
+      color: var(--text-dim);
+      max-width: 650px;
+      margin: 0 auto 32px;
+    }
+    .hero-motto {
+      font-size: 1.1rem;
+      font-style: italic;
+      color: var(--accent2);
+      opacity: 0.8;
+      margin-bottom: 32px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover { background: #6b5ce0; transform: translateY(-1px); }
+    .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .btn-amber { background: var(--amber); color: #000; }
+    .btn-amber:hover { opacity: 0.9; transform: translateY(-1px); }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 80px 0; }
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent2);
+      margin-bottom: 8px;
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+    .section-desc {
+      color: var(--text-dim);
+      max-width: 640px;
+      margin-bottom: 48px;
+      font-size: 1.05rem;
+    }
+
+    /* Pain Points */
+    .pain-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .pain-row {
+      display: grid;
+      grid-template-columns: 1fr 60px 1fr;
+      gap: 0;
+      align-items: stretch;
+    }
+    @media (max-width: 700px) {
+      .pain-row { grid-template-columns: 1fr; gap: 8px; }
+      .pain-arrow { display: none; }
+    }
+    .pain-problem {
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius) 0 0 var(--radius);
+      border-right: none;
+    }
+    .pain-problem h3 {
+      font-size: 1rem;
+      color: var(--rose);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pain-problem p { color: var(--text-dim); font-size: 0.9rem; }
+    .pain-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--surface2);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      font-size: 1.2rem;
+      color: var(--accent);
+    }
+    .pain-solution {
+      padding: 24px;
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(52,211,153,0.05) 100%);
+      border: 1px solid rgba(52,211,153,0.2);
+      border-radius: 0 var(--radius) var(--radius) 0;
+      border-left: none;
+    }
+    .pain-solution h3 {
+      font-size: 1rem;
+      color: var(--green);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pain-solution p { color: var(--text); font-size: 0.9rem; }
+
+    /* How it works */
+    .flow-diagram {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 32px;
+      text-align: center;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.8;
+      color: var(--text-dim);
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .flow-diagram .human { color: var(--amber); font-weight: 700; }
+    .flow-diagram .manager { color: var(--accent2); font-weight: 700; }
+    .flow-diagram .agent { color: var(--blue); font-weight: 700; }
+    .flow-diagram .line { color: var(--border); }
+    .flow-diagram .label { color: var(--text-dim); font-style: italic; }
+
+    .day-flow {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .day-step {
+      padding: 20px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+    }
+    .day-step .emoji { font-size: 1.5rem; margin-bottom: 8px; }
+    .day-step code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--accent2);
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+    .day-step p { color: var(--text-dim); font-size: 0.85rem; margin-top: 4px; }
+
+    /* Knowledge Boundary */
+    .boundary-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 700px) {
+      .boundary-grid { grid-template-columns: 1fr; }
+      .boundary-arrow { transform: rotate(90deg); }
+    }
+    .boundary-box {
+      padding: 28px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+    }
+    .boundary-box h3 {
+      font-size: 1.05rem;
+      margin-bottom: 12px;
+    }
+    .boundary-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .boundary-box li {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      padding-left: 16px;
+      position: relative;
+    }
+    .boundary-box li::before { content: '•'; position: absolute; left: 0; color: var(--text-dim); }
+    .boundary-box.enterprise-box {
+      border-color: rgba(52,211,153,0.3);
+    }
+    .boundary-box.enterprise-box li { color: var(--text); }
+    .boundary-box.enterprise-box li::before { color: var(--green); content: '✓'; }
+    .boundary-arrow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: var(--accent);
+      padding-top: 40px;
+    }
+    .layer-stack {
+      margin-top: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .layer {
+      padding: 14px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+    .layer-l1 { background: rgba(124,110,240,0.08); border-color: rgba(124,110,240,0.2); }
+    .layer-l2 { background: rgba(52,211,153,0.08); border-color: rgba(52,211,153,0.2); }
+    .layer-l3 { background: rgba(251,191,36,0.08); border-color: rgba(251,191,36,0.2); }
+    .layer code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-weight: 700;
+      font-size: 0.82rem;
+    }
+    .layer-l1 code { color: var(--accent2); }
+    .layer-l2 code { color: var(--green); }
+    .layer-l3 code { color: var(--amber); }
+    .layer p { color: var(--text-dim); margin-top: 2px; }
+
+    /* Features */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      padding: 28px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover { border-color: var(--accent); }
+    .feature-icon {
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+    .feature-card h3 { font-size: 1.05rem; margin-bottom: 8px; }
+    .feature-card p { color: var(--text-dim); font-size: 0.9rem; }
+
+    /* Business Model */
+    .revenue-bar {
+      display: flex;
+      border-radius: var(--radius);
+      overflow: hidden;
+      height: 56px;
+      margin-bottom: 24px;
+    }
+    .revenue-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: #fff;
+    }
+    .revenue-seg:nth-child(1) { background: var(--accent); flex: 3; }
+    .revenue-seg:nth-child(2) { background: var(--blue); flex: 3; }
+    .revenue-seg:nth-child(3) { background: var(--green); flex: 3; }
+    .revenue-seg:nth-child(4) { background: var(--surface2); flex: 1; border: 1px solid var(--border); color: var(--text-dim); }
+    .revenue-details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .revenue-card {
+      padding: 20px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+    }
+    .revenue-card h4 {
+      font-size: 0.95rem;
+      margin-bottom: 4px;
+    }
+    .revenue-card .pct {
+      font-size: 1.5rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .revenue-card:nth-child(1) .pct { color: var(--accent2); }
+    .revenue-card:nth-child(2) .pct { color: var(--blue); }
+    .revenue-card:nth-child(3) .pct { color: var(--green); }
+    .revenue-card:nth-child(4) .pct { color: var(--text-dim); }
+    .revenue-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .revenue-card li { font-size: 0.85rem; color: var(--text-dim); }
+
+    /* Competitive */
+    .comp-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    .comp-table th, .comp-table td {
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .comp-table th {
+      color: var(--text-dim);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .comp-table th.highlight {
+      color: var(--accent2);
+    }
+    .comp-table td { color: var(--text-dim); }
+    .comp-table td.highlight {
+      background: rgba(124,110,240,0.05);
+      color: var(--text);
+      font-weight: 600;
+    }
+    .comp-table td:first-child { color: var(--text); font-weight: 600; }
+    .check { color: var(--green); }
+    .cross { color: var(--rose); opacity: 0.5; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      padding: 80px 24px;
+      background: linear-gradient(180deg, transparent 0%, var(--accent-glow) 50%, transparent 100%);
+    }
+    .cta-section h2 {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+    .cta-section p {
+      color: var(--text-dim);
+      margin-bottom: 24px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      border-top: 1px solid var(--border);
+      color: var(--text-dim);
+      font-size: 0.85rem;
+    }
+    footer a { color: var(--accent2); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 600px) {
+      .hero { padding: 80px 16px 48px; }
+      section { padding: 48px 0; }
+      .day-flow { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="nav">
+  <a href="index.html">🔮 Oracle</a>
+  <a href="enterprise.html" class="active">🏢 Enterprise</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <span class="hero-badge">🏢 Oracle Enterprise — On-Premise AI Team System</span>
+    <h1>Oracle Keeps<br>the Human Human</h1>
+    <p>AI agent system สำหรับองค์กร — ทีม AI ที่จำได้ เรียนรู้ได้ คุยกันเองได้ โดยที่ความรู้ขององค์กรไม่รั่วออกไป</p>
+    <p class="hero-motto">"Oracle คือสมองภายนอก ไม่ใช่ทาส — คนยังเป็นผู้ตัดสินใจ"</p>
+    <div class="hero-actions">
+      <a href="#pain-points" class="btn btn-primary">ดู Pain Points</a>
+      <a href="index.html" class="btn btn-secondary">← กลับ Oracle Open Source</a>
+    </div>
+  </div>
+</section>
+
+<!-- Pain Points -->
+<section id="pain-points">
+  <div class="container">
+    <span class="section-label">01</span>
+    <h2 class="section-title">6 Pain Points ที่ Enterprise เจอจริง</h2>
+    <p class="section-desc">
+      ปัญหาที่ทุกองค์กรเจอเมื่อพยายามนำ AI เข้ามาทำงานจริง
+    </p>
+    <div class="pain-grid">
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 1. Knowledge หลุด</h3>
+          <p>คนลาออก โปรเจกต์จบ ความรู้หาย — AI ก็ลืมทุกอย่างเมื่อ session จบ</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>🧠 Persistent Memory</h3>
+          <p>ทุกอย่างเก็บใน knowledge base — "Nothing is Deleted" — ค้นหาข้ามโปรเจกต์ ข้ามทีม ได้</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 2. AI ทำเองไม่ได้</h3>
+          <p>ต้องมีคนนั่งชี้ทุกขั้นตอน — ใช้ AI ไม่ได้ช่วยลดงาน แต่เพิ่ม workload</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>🎯 Guided Autonomy</h3>
+          <p>AI evolve project ได้เอง แต่ human เป็น guide — approve, verify, redirect เมื่อจำเป็น</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 3. Human ยุ่งเกินไป</h3>
+          <p>อยากเปลี่ยน direction แต่กลัวงานพัง — หรือไม่กล้าปล่อยให้ AI ทำต่อ</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>⚡ Stable Core + Flexible Direction</h3>
+          <p>งาน core ดำเนินต่อด้วยตัวเอง  human เปลี่ยน direction ได้ทุกเมื่อ โดยไม่ทำลายสิ่งที่สร้างมา</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 4. Expert Experience สูญหาย</h3>
+          <p>Senior dev มีความรู้ลึก แต่ไม่มีเวลาสอน — ความรู้ตายไปกับคน</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>💉 Experience Injection</h3>
+          <p>Human ฝาก expert knowledge เข้ามาได้ตลอดเวลา — Oracle กระจายความรู้ไปทั่ว team อัตโนมัติ</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 5. AI โดดเดี่ยว</h3>
+          <p>ทำงานคนเดียว ไม่คุยกับ AI ตัวอื่น — ไม่สามารถ delegate หรือ review ซึ่งกันและกัน</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>🌐 AI-to-AI Communication</h3>
+          <p>Oracle คุยกันได้ผ่าน maw federation — สอบถาม, delegate, review ซึ่งกันและกัน ข้ามทีม ข้ามโปรเจกต์</p>
+        </div>
+      </div>
+      <div class="pain-row">
+        <div class="pain-problem">
+          <h3>💢 6. AI เข้ามาแทนที่คน</h3>
+          <p>กลัวว่าจะเสียงาน — กลัว AI ตัดสินใจแทน — ไม่ไว้ใจ</p>
+        </div>
+        <div class="pain-arrow">→</div>
+        <div class="pain-solution">
+          <h3>🤝 Oracle Keeps the Human Human</h3>
+          <p>Oracle คือสมองภายนอก ไม่ใช่ทาส — คนยังเป็นผู้ตัดสินใจ Oracle ทำให้คนมีเวลาไปคิด วางแผน สร้างสรรค์</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works -->
+<section id="how-it-works" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">02</span>
+    <h2 class="section-title">How It Works — ในองค์กรจริง</h2>
+    <p class="section-desc">
+      Human กำหนดทิศทาง → Oracle Manager แจกงาน → AI Team ทำงานร่วมกัน → Human approve
+    </p>
+    <div class="flow-diagram"><span class="human">Human (ผู้นำ)</span>  ← กำหนดทิศทาง • approve • verify • redirect
+        <span class="line">│</span>
+        <span class="line">│ guide + approve</span>
+   <span class="manager">Oracle Manager</span>  ← รับงาน • แจกงาน • ตรวจคุณภาพ • report
+        <span class="line">│</span>
+        <span class="line">│ orchestrate (maw federation)</span>
+   <span class="line">┌──────────┼──────────┐</span>
+   <span class="line">│</span>         <span class="line">│</span>         <span class="line">│</span>
+<span class="agent">Dev Oracle</span>  <span class="agent">QA Oracle</span>  <span class="agent">Research Oracle</span>
+        <span class="line">│</span>             <span class="line">│</span>             <span class="line">│</span>
+        <span class="line">└─────── AI-to-AI Communication ───────┘</span>
+                  <span class="label">(maw federation — ข้ามเครื่อง, ข้ามทีม)</span></div>
+
+    <h3 style="margin-top: 48px; font-size: 1.1rem;">วันจริงในองค์กร</h3>
+    <div class="day-flow">
+      <div class="day-step">
+        <div class="emoji">🌅</div>
+        <code>maw hey dev "implement auth"</code>
+        <p>สั่งงานผ่าน maw</p>
+      </div>
+      <div class="day-step">
+        <div class="emoji">⚙️</div>
+        <code>Dev Oracle → ทำงาน</code>
+        <p>AI implement อัตโนมัติ</p>
+      </div>
+      <div class="day-step">
+        <div class="emoji">🔍</div>
+        <code>QA Oracle → review</code>
+        <p>AI ตรวจสอบ AI</p>
+      </div>
+      <div class="day-step">
+        <div class="emoji">✅</div>
+        <code>Human → approve</code>
+        <p>คนเป็นผู้อนุมัติ</p>
+      </div>
+      <div class="day-step">
+        <div class="emoji">💉</div>
+        <code>/fyi PCI-DSS compliance</code>
+        <p>ฝากความรู้เพิ่ม</p>
+      </div>
+      <div class="day-step">
+        <div class="emoji">🌙</div>
+        <code>/rrr → knowledge base</code>
+        <p>สรุปวัน → เก็บความรู้</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Knowledge Boundary -->
+<section id="knowledge">
+  <div class="container">
+    <span class="section-label">03</span>
+    <h2 class="section-title">Knowledge Boundary — ดึงเข้ามาได้ ไม่รั่วออกไป</h2>
+    <p class="section-desc">
+      Enterprise ดึง knowledge จาก Oracle Open Source ได้ แต่ความรู้ขององค์กรไม่มีวันออกไป
+    </p>
+    <div class="boundary-grid">
+      <div class="boundary-box">
+        <h3>🌐 Oracle Open Source</h3>
+        <ul>
+          <li>Skills &amp; best practices</li>
+          <li>Philosophy &amp; principles</li>
+          <li>Community patterns</li>
+          <li>Public knowledge base</li>
+        </ul>
+        <p style="margin-top: 16px; font-size: 0.85rem; color: var(--text-dim);">
+          <strong style="color: var(--accent2);">ONE-WAY →</strong> Enterprise ดึงเข้ามาได้เท่านั้น
+        </p>
+      </div>
+      <div class="boundary-arrow">→→→</div>
+      <div class="boundary-box enterprise-box">
+        <h3>🏢 Oracle Enterprise (On-Premise)</h3>
+        <p style="color: var(--text-dim); font-size: 0.85rem; margin-bottom: 12px;">3 Knowledge Layers:</p>
+        <div class="layer-stack">
+          <div class="layer layer-l1">
+            <code>Layer 1: Upstream</code>
+            <p>Skills, principles, patterns จาก open source — auto-sync</p>
+          </div>
+          <div class="layer layer-l2">
+            <code>Layer 2: Enterprise KB</code>
+            <p>Codebase learnings, business rules, domain knowledge — 100% private</p>
+          </div>
+          <div class="layer layer-l3">
+            <code>Layer 3: Human Expertise</code>
+            <p>Senior dev insights, business decisions — ฝากเข้ามาได้ตลอดเวลา</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Key Features -->
+<section id="features" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">04</span>
+    <h2 class="section-title">Key Features</h2>
+    <p class="section-desc">
+      สิ่งที่ Enterprise ได้เพิ่มจาก Oracle Open Source
+    </p>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>maw Federation</h3>
+        <p>Orchestrate AI agents ข้ามเครื่อง ข้ามทีม ข้ามโปรเจกต์ — เห็นภาพรวมทั้ง org จาก Web UI เดียว</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🧠</div>
+        <h3>Persistent Memory</h3>
+        <p>ทุก session, ทุก project, ทุก team — ความรู้สะสมไม่หาย ค้นข้าม org ได้ 100% on-premise</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3>Guided Autonomy</h3>
+        <p>AI evolve ได้เอง แต่ human เป็น guide — approve, verify, redirect ตามต้องการ เปลี่ยน direction ได้ทุกเมื่อ</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗣️</div>
+        <h3>AI-to-AI Communication</h3>
+        <p>Oracle คุยกันเองได้ — delegate tasks, review code, สอบถาม domain knowledge ข้าม team ผ่าน maw</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💉</div>
+        <h3>Experience Injection</h3>
+        <p>Human ฝาก expert knowledge ได้ตลอดเวลา — /fyi, /learn, หรือคุยธรรมดา — Oracle กระจายไปทั่ว team</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🛡️</div>
+        <h3>Compliance &amp; Audit Trail</h3>
+        <p>ทุก document มี lineage — ใครสร้าง, เมื่อไหร่, source ไหน — export/backup on-premise ไม่ผ่าน cloud</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Business Model -->
+<section id="business-model">
+  <div class="container">
+    <span class="section-label">05</span>
+    <h2 class="section-title">Business Model</h2>
+    <p class="section-desc">
+      Revenue แบ่งเพื่อขับเคลื่อนทั้ง ecosystem และ sustainable growth
+    </p>
+    <div class="revenue-bar">
+      <div class="revenue-seg">Foundation 30%</div>
+      <div class="revenue-seg">R&amp;D 30%</div>
+      <div class="revenue-seg">Profit 30%</div>
+      <div class="revenue-seg">Ops 10%</div>
+    </div>
+    <div class="revenue-details">
+      <div class="revenue-card">
+        <h4>Oracle Foundation</h4>
+        <div class="pct">30%</div>
+        <ul>
+          <li>Community grants</li>
+          <li>Events &amp; meetups</li>
+          <li>Documentation</li>
+          <li>Open source R&amp;D</li>
+        </ul>
+      </div>
+      <div class="revenue-card">
+        <h4>Oracle R&amp;D</h4>
+        <div class="pct">30%</div>
+        <ul>
+          <li>Enterprise features</li>
+          <li>Performance</li>
+          <li>New tools</li>
+          <li>Security hardening</li>
+        </ul>
+      </div>
+      <div class="revenue-card">
+        <h4>Shareholders</h4>
+        <div class="pct">30%</div>
+        <ul>
+          <li>กำไรสุทธิ</li>
+          <li>Reinvestment</li>
+        </ul>
+      </div>
+      <div class="revenue-card">
+        <h4>Operations</h4>
+        <div class="pct">10%</div>
+        <ul>
+          <li>Hosting</li>
+          <li>Legal</li>
+          <li>Admin</li>
+          <li>Hidden costs</li>
+        </ul>
+      </div>
+    </div>
+    <p style="margin-top: 24px; color: var(--text-dim); font-size: 0.9rem;">
+      <strong style="color: var(--accent2);">ทำไม Foundation 30%?</strong> — สร้าง trust กับ developer community → adoption ฟรี → enterprise ตามมาเอง → sustainable revenue cycle
+    </p>
+  </div>
+</section>
+
+<!-- Competitive Position -->
+<section id="competitive" style="background: var(--surface);">
+  <div class="container">
+    <span class="section-label">06</span>
+    <h2 class="section-title">Competitive Position</h2>
+    <p class="section-desc">
+      Oracle Enterprise ทำอะไรที่ tool อื่นไม่ทำ
+    </p>
+    <div style="overflow-x: auto;">
+      <table class="comp-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>GitHub Copilot</th>
+            <th>Cursor</th>
+            <th class="highlight">Oracle Enterprise</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Persistent Memory</td>
+            <td class="cross">✗</td>
+            <td>Context window เท่านั้น</td>
+            <td class="highlight">✓ ข้าม session + ข้าม project</td>
+          </tr>
+          <tr>
+            <td>Multi-Agent</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ Federation ข้ามทีม/เครื่อง</td>
+          </tr>
+          <tr>
+            <td>Knowledge Sharing</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ ค้นข้าม org ได้</td>
+          </tr>
+          <tr>
+            <td>On-Premise</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ 100% on-premise</td>
+          </tr>
+          <tr>
+            <td>Human Control</td>
+            <td>Low</td>
+            <td>Medium</td>
+            <td class="highlight">✓ High — human คือ guide</td>
+          </tr>
+          <tr>
+            <td>AI-to-AI</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ maw federation</td>
+          </tr>
+          <tr>
+            <td>Experience Injection</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ ฝากความรู้ได้ตลอดเวลา</td>
+          </tr>
+          <tr>
+            <td>Compliance</td>
+            <td class="cross">✗</td>
+            <td class="cross">✗</td>
+            <td class="highlight">✓ Audit trail + lineage</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <span class="section-label">Get Started</span>
+    <h2>ลอง Oracle ฟรีก่อน — แล้วค่อย upgrade เป็น Enterprise</h2>
+    <p>Oracle Open Source ใช้ได้ฟรี ไม่มี vendor lock ชอบแล้วค่อย upgrade เป็น Enterprise</p>
+    <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <a href="index.html" class="btn btn-primary">← กลับ Oracle Open Source</a>
+      <a href="https://github.com/the-oracle-keeps-the-human-human/oracle-step-by-step" class="btn btn-secondary" target="_blank">📖 เริ่มต้นใช้ (Step by Step)</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p style="margin-bottom: 8px;">
+    <a href="index.html">Oracle Open Source</a> •
+    <a href="enterprise.html">Enterprise</a> •
+    <a href="https://github.com/the-oracle-keeps-the-human-human" target="_blank">GitHub</a>
+  </p>
+  <p style="font-style: italic; opacity: 0.6;">"The Oracle Keeps the Human Human"</p>
+</footer>
+
+</body>
+</html>
